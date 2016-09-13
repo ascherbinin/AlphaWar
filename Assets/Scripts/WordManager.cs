@@ -8,6 +8,7 @@ public class WordManager : MonoBehaviour
 	List<Letter> word = new List<Letter>();
 	public GameObject letter;
 	// Use this for initialization
+	private Screen _screen;
 	void Start () 
 	{
 		foreach(char c in wordStr){
@@ -24,9 +25,12 @@ public class WordManager : MonoBehaviour
 
 	void GenerateWord(List<Letter> _word)
 	{
-		float posX = -2.75F;
+		int count = _word.Count / 2;
+		Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane) );
+		float posY = center.y + 2.75F * 2.5F;
+		float posX = center.x - 2.75F * count;
 		foreach (var item in _word) {
-			Instantiate (letter, new Vector2 (posX, 0), Quaternion.identity);
+			Instantiate (letter, new Vector2 (posX, posY), Quaternion.identity);
 			letter.GetComponent<LetterObject> ().SetValue (item.value, item.State);
 			posX += 2.57F;
 		}

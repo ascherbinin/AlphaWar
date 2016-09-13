@@ -28,6 +28,11 @@ public class LetterObject : MonoBehaviour
 		_state = state;
 		UpdateValues ();
 	}
+
+	public void Hide(bool hide)
+	{
+		gameObject.SetActive (!hide);
+	}
 	
 	// Update is called once per frame
 	void Update () {
