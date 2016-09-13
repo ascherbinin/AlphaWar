@@ -4,40 +4,53 @@ using System.Collections.Generic;
 
 public class WordManager : MonoBehaviour 
 {
-	public string wordStr = "war";
+    public static WordManager instance = null;
+
 	List<Letter> word = new List<Letter>();
 	public GameObject letter;
-	// Use this for initialization
-	private Screen _screen;
-	void Start () 
-	{
-		foreach(char c in wordStr){
-			word.Add(new Letter(c.ToString(), LetterState.Static));
-		}
-		GenerateWord (word);
-	}
-	
-	// Update is called once per frame
-	void Update () 
+
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance == this)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(this);
+    }
+
+    // Update is called once per frame
+    void Update () 
 	{
 	
 	}
 
-	void GenerateWord(List<Letter> _word)
+	public List<Letter> GenerateWord(string wordStr)
 	{
-		int count = _word.Count / 2;
-		Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane) );
-		float posY = center.y + 2.75F * 2.5F;
-		float posX = center.x - 2.75F * count;
-		foreach (var item in _word) {
-			Instantiate (letter, new Vector2 (posX, posY), Quaternion.identity);
-			letter.GetComponent<LetterObject> ().SetValue (item.value, item.State);
-			posX += 2.57F;
-		}
-	}
+        foreach (char c in wordStr)
+        {
+            word.Add(new Letter(c.ToString(), LetterState.Static));
+        }
+        CreateWord(word);
+        return word;
+    }
 
-	void CreateWord() 
+	void CreateWord(List<Letter> _word) 
 	{
-		
-	}
+        int count = _word.Count / 2;
+        Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane));
+        float posY = center.y + 2.57F * 2.5F;
+        float posX = center.x - (2.57F * count) + 1.285F;
+        foreach (var item in _word)
+        {
+            Instantiate(letter, new Vector2(posX, posY), Quaternion.identity);
+            letter.GetComponent<LetterObject>().SetValue(item.value, item.State);
+            posX += 2.57F;
+        }
+    }
 }
