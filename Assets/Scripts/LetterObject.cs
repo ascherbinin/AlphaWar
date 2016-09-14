@@ -10,18 +10,15 @@ public enum LetterState
 
 public class LetterObject : MonoBehaviour 
 {
-
-	public  SpriteRenderer _renderer;
+    public  SpriteRenderer _renderer;
 	public  Text _alphaText;
 
-	private LetterState _state;
+	public Color _startColor = Color.white;
+    public Color _staticColor = Color.gray;
+    public Color _blinkColor = Color.yellow;
 
-	private Color _startColor = Color.white;
-	private Color _staticColor = Color.gray;
-	private Color _blinkColor = Color.yellow;
-
-	public static Vector2 Position { get; set; }
-	public static string Value { get; set;}
+	public Vector2 Position { get; set; }
+	public string Value { get; set;}
 
 	void Awake()
 	{
@@ -32,22 +29,15 @@ public class LetterObject : MonoBehaviour
 	{
 		StartCoroutine (ScaleOverTime (1));
 	}
-
-	public void SetValue(string value, LetterState state) 
-	{
-		Value = value;
-		_state = state;
-		UpdateValues ();
-	}
 			
 	// Update is called once per frame
 	void Update () {
 	
 	}
 
-	void UpdateValues()
+	public void Setup(Vector2 pos, char value, LetterState state)
 	{
-		if (_state == LetterState.Static) 
+		if (state == LetterState.Static) 
 		{
 			gameObject.tag = "LetterStatic";
 			_renderer.color = _staticColor;
@@ -57,7 +47,8 @@ public class LetterObject : MonoBehaviour
 			gameObject.tag = "LetterActive";
 			_renderer.color = _startColor;
 		}
-		_alphaText.text = Value;
+		_alphaText.text = value.ToString();
+        gameObject.transform.position = pos;
 	}
 
 	IEnumerator ScaleOverTime(float time)
@@ -93,12 +84,7 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		LetterManager.instance.CompareLetters(gameObject);
+
 	}
 
-
-	public string GetValue ()
-	{
-		return Value;
-	}
 }

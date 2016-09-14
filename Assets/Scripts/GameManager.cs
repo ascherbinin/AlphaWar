@@ -39,8 +39,7 @@ public class GameManager : MonoBehaviour
 
 	void InitGame()
 	{
-        List<char> startWords =  WordManager.instance.GenerateWord(wordStr);
-        LetterManager.instance.SetChars(startWords);
-        LetterManager.instance.GenerateRandomLetters(Screen.width, Screen.height);
+        LetterManager.instance.Word = wordStr;
+        LetterManager.instance.RunGenerate();
 	}
 }

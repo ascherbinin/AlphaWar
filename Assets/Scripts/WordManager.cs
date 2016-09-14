@@ -4,54 +4,51 @@ using System.Collections.Generic;
 
 public class WordManager : MonoBehaviour 
 {
-    public static WordManager instance = null;
+ //   public static WordManager instance = null;
 
-	List<char> word = new List<char>();
-	public GameObject letter;
+	//List<char> word = new List<char>();
+	//public GameObject letter;
 
 
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance == this)
-        {
-            Destroy(gameObject);
-        }
+ //   void Awake()
+ //   {
+ //       if (instance == null)
+ //       {
+ //           instance = this;
+ //       }
+ //       else if (instance == this)
+ //       {
+ //           Destroy(gameObject);
+ //       }
 
-        DontDestroyOnLoad(this);
-    }
+ //       DontDestroyOnLoad(this);
+ //   }
 
-    // Update is called once per frame
-    void Update () 
-	{
+ //   // Update is called once per frame
+ //   void Update () 
+	//{
 	
-	}
+	//}
 
-	public List<char> GenerateWord(string wordStr)
-	{
+	//public List<char> GenerateWord(string wordStr)
+	//{
 		
-        foreach (char c in wordStr)
-        {
-			word.Add(c);
-        }
-        CreateWord(word);
-        return word;
-    }
+ //       foreach (char c in wordStr)
+ //       {
+	//		word.Add(c);
+ //       }
+ //       CreateWord(word);
+ //       return word;
+ //   }
 
-	void CreateWord(List<char> _word) 
-	{ 
-		int count = _word.Count / 2;
-		Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane));
-		float posY = center.y + 2.57F * 2.5F;
-		float posX = center.x - (2.57F * count) + 1.285F;
-        foreach (var item in _word)
-        {
-			Instantiate(letter, new Vector2(posX, posY), Quaternion.identity);
-			letter.GetComponent<LetterObject>().SetValue(item.ToString(), LetterState.Static);
-			posX += 2.57F;
-        }
-    }
+	//void CreateWord(List<char> _word) 
+	//{ 
+		
+ //       foreach (var item in _word)
+ //       {
+	//		Instantiate(letter, new Vector2(posX, posY), Quaternion.identity);
+	//		letter.GetComponent<LetterObject>().SetValue(item.ToString(), LetterState.Static);
+
+ //       }
+ //   }
 }

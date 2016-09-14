@@ -233,11 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff2f534d3cf14166894c18a5db4ca4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  spawn: {fileID: 1919647140}
-=======
   spawn: {fileID: 2068731127}
->>>>>>> 22d4c95d44342c27a6910e7b3e8865d3d9969c9f
   letter: {fileID: 1000010495156156, guid: 6786482149fb34bee891e5d0875c144c, type: 2}
 --- !u!1 &1295926003
 GameObject:
