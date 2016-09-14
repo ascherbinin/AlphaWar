@@ -6,7 +6,8 @@ public class LetterManager : MonoBehaviour
 {
     public static LetterManager instance = null;
 
-    private List<Letter> _charsList = new List<Letter>();
+	private List<char> _charsList = new List<char>();
+	private List<GameObject> _letterList = new List<GameObject>();
     public Spawn spawn;
     public GameObject letter;
 
@@ -33,10 +34,10 @@ public class LetterManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-	
+
 	}
 
-    public void SetChars(List<Letter> chars)
+    public void SetChars(List<char> chars)
     {
         foreach (var item in chars)
         {
@@ -49,7 +50,14 @@ public class LetterManager : MonoBehaviour
         foreach (var item in _charsList)
         {
           spawn.SpawnObject(letter);
-          letter.GetComponent<LetterObject>().SetValue(item.value, LetterState.Active);
+		  letter.GetComponent<LetterObject>().SetValue(item.ToString(), LetterState.Active);
+			_letterList.Add (letter);
         }
     }
+
+	public void CompareLetters(GameObject obj)
+	{
+		var letObj = obj.GetComponent<LetterObject> ();
+		Debug.Log (letObj.GetValue());
+	}
 }
