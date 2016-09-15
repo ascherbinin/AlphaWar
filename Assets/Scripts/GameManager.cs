@@ -13,7 +13,7 @@ public enum GameState
 public class GameManager : MonoBehaviour 
 {
 	public static GameManager instance = null;
-    public string wordStr = "war";
+	public string[] Words;
 
     void Awake()
 	{
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
 
 	void InitGame()
 	{
+		string wordStr = Words[Random.Range(0,Words.Length)];
         LetterManager.instance.Word = wordStr;
         LetterManager.instance.RunGenerate();
 	}

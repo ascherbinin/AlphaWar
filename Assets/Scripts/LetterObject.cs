@@ -19,6 +19,7 @@ public class LetterObject : MonoBehaviour
 
 	public Vector2 Position { get; set; }
 	public string Value { get; set;}
+	public string ID { get; set;}
 
 	void Awake()
 	{
@@ -35,20 +36,15 @@ public class LetterObject : MonoBehaviour
 	
 	}
 
-	public void Setup(Vector2 pos, char value, LetterState state)
+	public void Setup(Vector2 pos, char value, LetterState state, string id)
 	{
-		if (state == LetterState.Static) 
-		{
-			gameObject.tag = "LetterStatic";
-			_renderer.color = _staticColor;
-		} 
-		else 
-		{
-			gameObject.tag = "LetterActive";
-			_renderer.color = _startColor;
-		}
+		_renderer.color = state == LetterState.Static ? _staticColor : _startColor;
+		_alphaText.color = state == LetterState.Static ? _staticColor : _startColor;
+		gameObject.tag = state == LetterState.Static ? "LetterStatic" : "LetterActive";
 		_alphaText.text = value.ToString();
         gameObject.transform.position = pos;
+		ID = id;
+		Debug.Log ("Setup ID: " + ID);
 	}
 
 	IEnumerator ScaleOverTime(float time)
@@ -72,6 +68,7 @@ public class LetterObject : MonoBehaviour
 		{
 			_renderer.color = Color.Lerp(_startColor, _blinkColor, Mathf.PingPong(Time.time, 1));
 		}
+
 	}
 
 	void OnMouseExit()
@@ -84,7 +81,28 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseDown()
 	{
-
+		LetterManager.instance.CompareLetters (gameObject);
 	}
 
+	void OnMouseEnter()
+	{
+		Debug.Log ("ID: " + ID);
+	}
+
+	IEnumerator MoveToTarget(Vector2 pos, float timeToMove)
+	{
+		var currentPos = transform.position;
+		var t = 0f;
+		while(t < 1)
+		{
+			t += Time.deltaTime / timeToMove;
+			transform.position = Vector2.Lerp(currentPos, pos, t);
+			yield return null;
+		}
+	}
+
+	public void Move(Vector2 pos, float timeToMove)
+	{
+		StartCoroutine(MoveToTarget(pos, timeToMove));
+	}
 }

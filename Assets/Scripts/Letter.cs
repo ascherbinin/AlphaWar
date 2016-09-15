@@ -15,7 +15,10 @@ public class Letter
     public LetterState State
     {
         get { return _state; }
+		set { _state = value; }
     }
+
+	public string ID { get; set; }
 
     public char Value
     {
@@ -23,11 +26,24 @@ public class Letter
         set;
     }
 
-    public Letter(char alphaValue, LetterState state, Vector2 pos)
+	public Letter(char alphaValue, LetterState state, Vector2 pos)
     {
         Value = alphaValue;
         _state = state;
         Position = pos;
+		ID = System.Guid.NewGuid().ToString();
     }
 
+	public Letter(char alphaValue, LetterState state, Vector2 pos, string id)
+	{
+		Value = alphaValue;
+		_state = state;
+		Position = pos;
+		ID = id;
+	}
+
+	public string GetID()
+	{
+		return ID;
+	}
 }

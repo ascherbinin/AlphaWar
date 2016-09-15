@@ -6,8 +6,10 @@ public class LetterManager : MonoBehaviour
 {
     public static LetterManager instance = null;
 
-    private List<Letter> _letterList = new List<Letter>();
-	private List<GameObject> _letterObject = new List<GameObject>();
+    private List<Letter> _letterStaticList = new List<Letter>();
+	private List<Letter> _randomLetters = new List<Letter>();
+	private List<Letter> _resList = new List<Letter>();
+//	private List<GameObject> _letterObject = new List<GameObject>();
     public GameObject Spawn;
     public GameObject Letter;
 
@@ -54,7 +56,7 @@ public class LetterManager : MonoBehaviour
         float posX = center.x - (2.57F * count) + 1.285F;
         foreach (char item in Word)
         {
-            _letterList.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
+			_letterStaticList.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
             posX += 2.57F;
         }
     }
@@ -62,30 +64,45 @@ public class LetterManager : MonoBehaviour
     public void GenerateRandomLetters()
     {
         Vector2 rndPosWithin;
-        foreach (char item in Word)
+		foreach (Letter item in _letterStaticList)
         {
             rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
             rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
-            _letterList.Add(new Letter(item, LetterState.Active, rndPosWithin));
+			_randomLetters.Add(new Letter(item.Value, LetterState.Active, rndPosWithin,item.GetID()));
         }
     }
 
     public void FillLetters()
     {
-        foreach (var item in _letterList)
+		_resList.AddRange(_letterStaticList);
+		_resList.AddRange (_randomLetters);
+
+		foreach (var item in _resList)
         {
             var rotation = Quaternion.identity;
             if (item.State == LetterState.Active)
             {
-                rotation = Quaternion.Euler(0, 0, Random.Range(-75, 75));
+//                rotation = Quaternion.Euler(0, 0, Random.Range(-25, 25));
             }    
-            Instantiate(Letter, item.Position, rotation);
-            Letter.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State);
+			GameObject obj = (GameObject)Instantiate(Letter, item.Position, rotation);
+			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State, item.GetID());
         }
     }
 
 	public void CompareLetters(GameObject obj)
 	{
-		var letObj = obj.GetComponent<LetterObject> ();
+		var textObj = obj.GetComponent<LetterObject>();
+
+		foreach (var letter in _resList) 
+		{
+			if (letter.Value.ToString() == textObj._alphaText.text &&
+				letter.State == LetterState.Static &&
+				letter.GetID() == textObj.ID) 
+			{
+				textObj.Move (letter.Position, 1);
+				letter.State = LetterState.Active;
+			}
+		}
 	}
+		
 }

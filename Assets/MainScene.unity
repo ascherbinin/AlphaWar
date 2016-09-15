@@ -321,7 +321,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93125d852ddd448c941f58f48f5c987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wordStr: WarrioR
+  Words:
+  - ANDREY
+  - PASHA
+  - BOBAH
+  - FIGHT
+  - DICKINSIDE
 --- !u!1 &2068731125
 GameObject:
   m_ObjectHideFlags: 0
