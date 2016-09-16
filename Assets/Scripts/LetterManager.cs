@@ -6,10 +6,10 @@ public class LetterManager : MonoBehaviour
 {
     public static LetterManager instance = null;
 
-    private List<Letter> _letterStaticList = new List<Letter>();
+	private List<Letter> _wordLetters = new List<Letter>();
 	private List<Letter> _randomLetters = new List<Letter>();
 	private List<Letter> _resList = new List<Letter>();
-//	private List<GameObject> _letterObject = new List<GameObject>();
+	private List<GameObject> _lettersObject = new List<GameObject>();
     public GameObject Spawn;
     public GameObject Letter;
 
@@ -41,8 +41,9 @@ public class LetterManager : MonoBehaviour
 
 	}
 
-    public void RunGenerate()
+    public void RunGenerate(string pWord)
     {
+		Word = pWord;
         GenerateLettersForWord();
         GenerateRandomLetters();
         FillLetters();
@@ -56,7 +57,7 @@ public class LetterManager : MonoBehaviour
         float posX = center.x - (2.57F * count) + 1.285F;
         foreach (char item in Word)
         {
-			_letterStaticList.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
+			_wordLetters.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
             posX += 2.57F;
         }
     }
@@ -64,7 +65,7 @@ public class LetterManager : MonoBehaviour
     public void GenerateRandomLetters()
     {
         Vector2 rndPosWithin;
-		foreach (Letter item in _letterStaticList)
+		foreach (Letter item in _wordLetters)
         {
             rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
             rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
@@ -74,7 +75,7 @@ public class LetterManager : MonoBehaviour
 
     public void FillLetters()
     {
-		_resList.AddRange(_letterStaticList);
+		_resList.AddRange(_wordLetters);
 		_resList.AddRange (_randomLetters);
 
 		foreach (var item in _resList)
@@ -82,10 +83,11 @@ public class LetterManager : MonoBehaviour
             var rotation = Quaternion.identity;
             if (item.State == LetterState.Active)
             {
-//                rotation = Quaternion.Euler(0, 0, Random.Range(-25, 25));
+                rotation = Quaternion.Euler(0, 0, Random.Range(-25, 25));
             }    
 			GameObject obj = (GameObject)Instantiate(Letter, item.Position, rotation);
 			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State, item.GetID());
+			_lettersObject.Add (obj);
         }
     }
 
@@ -93,16 +95,55 @@ public class LetterManager : MonoBehaviour
 	{
 		var textObj = obj.GetComponent<LetterObject>();
 
-		foreach (var letter in _resList) 
+		foreach (var letter in _lettersObject) 
 		{
-			if (letter.Value.ToString() == textObj._alphaText.text &&
-				letter.State == LetterState.Static &&
-				letter.GetID() == textObj.ID) 
+			var letterScript = letter.GetComponent<LetterObject> ();
+			if (letterScript.State == LetterState.Static &&
+			    letterScript.ID == textObj.ID) 
 			{
-				textObj.Move (letter.Position, 1);
-				letter.State = LetterState.Active;
+				textObj.Move (letter, 1);
 			}
+				
 		}
+
+//		foreach (var letter in _resList) 
+//		{
+//			if (letter.Value.ToString() == textObj._alphaText.text &&
+//				letter.State == LetterState.Static &&
+//				letter.GetID() == textObj.ID) 
+//			{
+//				textObj.Move (letter.Position, 1);
+//				letter.State = LetterState.Active;
+//			}
+//		}
 	}
 		
+	public void ReloadLevel(string newWord)
+	{
+		DeleteAll ();
+		_resList.Clear ();
+		_wordLetters.Clear ();
+		_randomLetters.Clear ();
+		_lettersObject.Clear ();
+		RunGenerate (newWord);
+	}
+
+	public void DeleteAll()
+	{
+		foreach (GameObject o in GameObject.FindGameObjectsWithTag("LetterStatic"))
+		{
+			Destroy (o);
+		}
+
+		foreach (GameObject o in GameObject.FindGameObjectsWithTag("LetterActive"))
+		{
+			Destroy (o);
+		}
+	}
+
+	public void RemoveLetter(GameObject letter)
+	{
+		_lettersObject.Remove (letter);
+		Destroy (letter);
+	}
 }

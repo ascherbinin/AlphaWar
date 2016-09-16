@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour
 	{
 		string wordStr = Words[Random.Range(0,Words.Length)];
         LetterManager.instance.Word = wordStr;
-        LetterManager.instance.RunGenerate();
+        LetterManager.instance.RunGenerate(wordStr);
+	}
+
+	public void Restart()
+	{
+		string wordStr = Words[Random.Range(0,Words.Length)];
+		LetterManager.instance.ReloadLevel (wordStr);
 	}
 }

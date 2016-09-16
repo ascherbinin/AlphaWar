@@ -13,13 +13,14 @@ public class LetterObject : MonoBehaviour
     public  SpriteRenderer _renderer;
 	public  Text _alphaText;
 
-	public Color _startColor = Color.white;
+	public Color _acviteColor = Color.white;
     public Color _staticColor = Color.gray;
     public Color _blinkColor = Color.yellow;
 
 	public Vector2 Position { get; set; }
 	public string Value { get; set;}
 	public string ID { get; set;}
+	public LetterState State { get; set; }
 
 	void Awake()
 	{
@@ -38,13 +39,20 @@ public class LetterObject : MonoBehaviour
 
 	public void Setup(Vector2 pos, char value, LetterState state, string id)
 	{
-		_renderer.color = state == LetterState.Static ? _staticColor : _startColor;
-		_alphaText.color = state == LetterState.Static ? _staticColor : _startColor;
+		_renderer.color = state == LetterState.Static ? _staticColor : _acviteColor;
+		_alphaText.color = state == LetterState.Static ? _staticColor : _acviteColor;
 		gameObject.tag = state == LetterState.Static ? "LetterStatic" : "LetterActive";
 		_alphaText.text = value.ToString();
         gameObject.transform.position = pos;
 		ID = id;
-		Debug.Log ("Setup ID: " + ID);
+		State = state;
+	}
+
+	public void SetActive()
+	{
+		_renderer.color = _acviteColor;
+		_alphaText.color = _acviteColor;
+		State = LetterState.Active;
 	}
 
 	IEnumerator ScaleOverTime(float time)
@@ -66,7 +74,7 @@ public class LetterObject : MonoBehaviour
 	{
 		if (gameObject.tag == "LetterActive") 
 		{
-			_renderer.color = Color.Lerp(_startColor, _blinkColor, Mathf.PingPong(Time.time, 1));
+			_renderer.color = Color.Lerp(_acviteColor, _blinkColor, Mathf.PingPong(Time.time, 1));
 		}
 
 	}
@@ -75,7 +83,7 @@ public class LetterObject : MonoBehaviour
 	{
 		if (gameObject.tag == "LetterActive") 
 		{
-			_renderer.color = Color.Lerp(_renderer.color, _startColor, 1);
+			_renderer.color = Color.Lerp(_renderer.color, _acviteColor, 1);
 		}
 	}
 
@@ -86,23 +94,31 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		Debug.Log ("ID: " + ID);
+
 	}
 
-	IEnumerator MoveToTarget(Vector2 pos, float timeToMove)
+	IEnumerator MoveToTarget(GameObject letterTarget, float timeToMove)
 	{
 		var currentPos = transform.position;
+		Vector2 originalScale = gameObject.transform.localScale;
 		var t = 0f;
 		while(t < 1)
 		{
 			t += Time.deltaTime / timeToMove;
-			transform.position = Vector2.Lerp(currentPos, pos, t);
+
+			var strength = .3F;
+			var str = Mathf.Min (strength * t, 1);
+			transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.identity, str);
+			transform.position = Vector2.Lerp(currentPos, letterTarget.transform.position, t);
+			transform.localScale = Vector2.Lerp(originalScale, new Vector2(0f,0f), t / 3);
 			yield return null;
 		}
+		LetterManager.instance.RemoveLetter (gameObject);
+		letterTarget.GetComponent<LetterObject> ().SetActive ();
 	}
 
-	public void Move(Vector2 pos, float timeToMove)
+	public void Move(GameObject letter, float timeToMove)
 	{
-		StartCoroutine(MoveToTarget(pos, timeToMove));
+		StartCoroutine(MoveToTarget(letter, timeToMove));
 	}
 }
