@@ -21,6 +21,8 @@ ExportedObj/
 
 Build/iOS
 Build/android
+./ios-build/*
+ios-build/*
 
 Unity3D generated meta files
 *.pidb.meta
