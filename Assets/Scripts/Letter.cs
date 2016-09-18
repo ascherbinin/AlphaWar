@@ -11,7 +11,9 @@ public class Letter
     private LetterState _state;
    
     public Vector2 Position { get; set; }
-   
+    public float Width { get; set; }
+    public float Height { get; set; }
+
     public LetterState State
     {
         get { return _state; }
@@ -32,6 +34,8 @@ public class Letter
         _state = state;
         Position = pos;
 		ID = System.Guid.NewGuid().ToString();
+        Height = 2.7f;
+        Width = 2.7F;
     }
 
 	public Letter(char alphaValue, LetterState state, Vector2 pos, string id)
@@ -40,7 +44,9 @@ public class Letter
 		_state = state;
 		Position = pos;
 		ID = id;
-	}
+        Height = 2.7f;
+        Width = 2.7F;
+    }
 
 	public string GetID()
 	{

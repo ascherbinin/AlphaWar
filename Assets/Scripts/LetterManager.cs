@@ -67,9 +67,17 @@ public class LetterManager : MonoBehaviour
         Vector2 rndPosWithin;
 		foreach (Letter item in _wordLetters)
         {
-            rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-            rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
-			_randomLetters.Add(new Letter(item.Value, LetterState.Active, rndPosWithin,item.GetID()));
+            Letter temp;
+            do
+            {
+                rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
+                temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
+                Debug.Log("LETTER1: " + item.Position + "-" +item.Width + "-" + item.Height);
+                Debug.Log("LETTER2: " + temp.Position + "-" + temp.Width + "-" + temp.Height);
+            }
+            while (!DoBoxesIntersect(item, temp));
+            _randomLetters.Add(temp);
         }
     }
 
@@ -146,4 +154,10 @@ public class LetterManager : MonoBehaviour
 		_lettersObject.Remove (letter);
 		Destroy (letter);
 	}
+
+    bool DoBoxesIntersect(Letter a, Letter b)
+    {
+        return (Mathf.Abs(a.Position.x - b.Position.x) * 2 < (a.Width + b.Width)) &&
+               (Mathf.Abs(a.Position.y - b.Position.y) * 2 < (a.Height + b.Height));
+    }
 }

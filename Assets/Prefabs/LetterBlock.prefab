@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 212000010427068238}
   _alphaText: {fileID: 114000010272463972}
-  _startColor: {r: 1, g: 1, b: 1, a: 1}
+  _acviteColor: {r: 1, g: 1, b: 1, a: 1}
   _staticColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _blinkColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!212 &212000010427068238
