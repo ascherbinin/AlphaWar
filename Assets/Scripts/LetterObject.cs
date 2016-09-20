@@ -30,6 +30,10 @@ public class LetterObject : MonoBehaviour
 	void Start () 
 	{
 		StartCoroutine (ScaleOverTime (1));
+		if (State == LetterState.Active)
+		{
+			GetComponent<Rigidbody2D> ().velocity = new Vector2 (Random.Range (-5f, 5f), Random.Range (-5f, 5f));
+		}
 	}
 			
 	// Update is called once per frame
@@ -58,7 +62,8 @@ public class LetterObject : MonoBehaviour
 	IEnumerator ScaleOverTime(float time)
 	{
 		Vector2 originalScale = gameObject.transform.localScale;
-		Vector2 destinationScale = new Vector2(1.0f, 1.0f);
+
+		Vector2 destinationScale = State == LetterState.Active ? new Vector2(0.7f, 0.7f) : new Vector2(1f, 1f);
 
 		float currentTime = 0.0f;
 
@@ -99,6 +104,7 @@ public class LetterObject : MonoBehaviour
 
 	IEnumerator MoveToTarget(GameObject letterTarget, float timeToMove)
 	{
+		gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
 		var currentPos = transform.position;
 		Vector2 originalScale = gameObject.transform.localScale;
 		var t = 0f;

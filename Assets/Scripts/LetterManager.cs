@@ -67,17 +67,17 @@ public class LetterManager : MonoBehaviour
         Vector2 rndPosWithin;
 		foreach (Letter item in _wordLetters)
         {
-            Letter temp;
-            do
-            {
-                rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-                rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
-                temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
-                Debug.Log("LETTER1: " + item.Position + "-" +item.Width + "-" + item.Height);
-                Debug.Log("LETTER2: " + temp.Position + "-" + temp.Width + "-" + temp.Height);
-            }
-            while (!DoBoxesIntersect(item, temp));
-            _randomLetters.Add(temp);
+			rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+			rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
+			var temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
+
+			while (DoLetterIntersect (temp)) 
+			{
+				rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+				rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
+				temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
+			}
+			_randomLetters.Add (temp);
         }
     }
 
@@ -113,17 +113,6 @@ public class LetterManager : MonoBehaviour
 			}
 				
 		}
-
-//		foreach (var letter in _resList) 
-//		{
-//			if (letter.Value.ToString() == textObj._alphaText.text &&
-//				letter.State == LetterState.Static &&
-//				letter.GetID() == textObj.ID) 
-//			{
-//				textObj.Move (letter.Position, 1);
-//				letter.State = LetterState.Active;
-//			}
-//		}
 	}
 		
 	public void ReloadLevel(string newWord)
@@ -155,9 +144,18 @@ public class LetterManager : MonoBehaviour
 		Destroy (letter);
 	}
 
-    bool DoBoxesIntersect(Letter a, Letter b)
+    bool DoLetterIntersect(Letter a)
     {
-        return (Mathf.Abs(a.Position.x - b.Position.x) * 2 < (a.Width + b.Width)) &&
-               (Mathf.Abs(a.Position.y - b.Position.y) * 2 < (a.Height + b.Height));
+		bool intersect = false;
+
+		foreach (var item in _randomLetters) 
+		{
+			if ((Mathf.Abs(a.Position.x - item.Position.x) * 2 < (a.Width + item.Width)) &&
+				(Mathf.Abs(a.Position.y - item.Position.y) * 2 < (a.Height + item.Height)))
+			{
+				intersect = true;
+			}
+		}
+		return intersect;
     }
 }
