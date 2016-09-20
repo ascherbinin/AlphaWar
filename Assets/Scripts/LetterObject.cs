@@ -11,7 +11,8 @@ public enum LetterState
 public class LetterObject : MonoBehaviour 
 {
     public  SpriteRenderer _renderer;
-	public  Text _alphaText;
+	public  GameObject _alphaText;
+	private TextMesh _text;
 
 	public Color _acviteColor = Color.white;
     public Color _staticColor = Color.gray;
@@ -24,7 +25,7 @@ public class LetterObject : MonoBehaviour
 
 	void Awake()
 	{
-		
+		_text = _alphaText.GetComponent<TextMesh> ();
 	}
 	// Use this for initialization
 	void Start () 
@@ -34,6 +35,8 @@ public class LetterObject : MonoBehaviour
 		{
 			GetComponent<Rigidbody2D> ().velocity = new Vector2 (Random.Range (-5f, 5f), Random.Range (-5f, 5f));
 		}
+		_alphaText.GetComponent<MeshRenderer>().sortingOrder = 1;
+		_alphaText.GetComponent<MeshRenderer> ().sortingLayerID = GetComponent<SpriteRenderer>().sortingLayerID;
 	}
 			
 	// Update is called once per frame
@@ -44,9 +47,9 @@ public class LetterObject : MonoBehaviour
 	public void Setup(Vector2 pos, char value, LetterState state, string id)
 	{
 		_renderer.color = state == LetterState.Static ? _staticColor : _acviteColor;
-		_alphaText.color = state == LetterState.Static ? _staticColor : _acviteColor;
+		_text.color = state == LetterState.Static ? _staticColor : _acviteColor;
 		gameObject.tag = state == LetterState.Static ? "LetterStatic" : "LetterActive";
-		_alphaText.text = value.ToString();
+		_text.text = value.ToString();
         gameObject.transform.position = pos;
 		ID = id;
 		State = state;
@@ -56,7 +59,7 @@ public class LetterObject : MonoBehaviour
 	public void SetActive()
 	{
 		_renderer.color = _acviteColor;
-		_alphaText.color = _acviteColor;
+		_text.color = _acviteColor;
 		State = LetterState.Active;
 	}
 

@@ -107,18 +107,6 @@ public class LetterManager : MonoBehaviour
 		{
 			textObj.Move (item, 1);
 		}
-
-		foreach (var letter in _lettersObject) 
-		{
-			
-//			var letterScript = letter.GetComponent<LetterObject> ();
-//			if (letterScript.State == LetterState.Static &&
-//			    letterScript.ID == textObj.ID) 
-//			{
-//				textObj.Move (letter, 1);
-//			}
-				
-		}
 	}
 		
 	public void ReloadLevel(string newWord)
