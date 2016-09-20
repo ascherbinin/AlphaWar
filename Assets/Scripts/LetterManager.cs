@@ -102,15 +102,21 @@ public class LetterManager : MonoBehaviour
 	public void CompareLetters(GameObject obj)
 	{
 		var textObj = obj.GetComponent<LetterObject>();
+		var item = GetFirstStaticLetter();
+		if (item.GetComponent<LetterObject> ().ID == textObj.ID || item.GetComponent<LetterObject>().Value == textObj.Value) 
+		{
+			textObj.Move (item, 1);
+		}
 
 		foreach (var letter in _lettersObject) 
 		{
-			var letterScript = letter.GetComponent<LetterObject> ();
-			if (letterScript.State == LetterState.Static &&
-			    letterScript.ID == textObj.ID) 
-			{
-				textObj.Move (letter, 1);
-			}
+			
+//			var letterScript = letter.GetComponent<LetterObject> ();
+//			if (letterScript.State == LetterState.Static &&
+//			    letterScript.ID == textObj.ID) 
+//			{
+//				textObj.Move (letter, 1);
+//			}
 				
 		}
 	}
@@ -138,10 +144,16 @@ public class LetterManager : MonoBehaviour
 		}
 	}
 
-	public void RemoveLetter(GameObject letter)
+	public void RemoveLetter(GameObject letter, bool isDestroy)
 	{
-		_lettersObject.Remove (letter);
-		Destroy (letter);
+		if (!isDestroy) 
+		{
+			_lettersObject.Remove (letter);
+		} 
+		else 
+		{
+			Destroy (letter);
+		}
 	}
 
     bool DoLetterIntersect(Letter a)
@@ -158,4 +170,9 @@ public class LetterManager : MonoBehaviour
 		}
 		return intersect;
     }
+
+	GameObject GetFirstStaticLetter()
+	{
+		return _lettersObject.Find (state => state.GetComponent<LetterObject> ().State == LetterState.Static);
+	}
 }

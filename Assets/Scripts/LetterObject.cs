@@ -50,6 +50,7 @@ public class LetterObject : MonoBehaviour
         gameObject.transform.position = pos;
 		ID = id;
 		State = state;
+		Value = value.ToString ();
 	}
 
 	public void SetActive()
@@ -104,6 +105,7 @@ public class LetterObject : MonoBehaviour
 
 	IEnumerator MoveToTarget(GameObject letterTarget, float timeToMove)
 	{
+		LetterManager.instance.RemoveLetter (gameObject, false);
 		gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
 		var currentPos = transform.position;
 		Vector2 originalScale = gameObject.transform.localScale;
@@ -119,7 +121,7 @@ public class LetterObject : MonoBehaviour
 			transform.localScale = Vector2.Lerp(originalScale, new Vector2(0f,0f), t / 3);
 			yield return null;
 		}
-		LetterManager.instance.RemoveLetter (gameObject);
+		LetterManager.instance.RemoveLetter (gameObject, true);
 		letterTarget.GetComponent<LetterObject> ().SetActive ();
 	}
 
