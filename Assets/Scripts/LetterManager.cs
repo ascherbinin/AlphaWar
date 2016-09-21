@@ -134,14 +134,9 @@ public class LetterManager : MonoBehaviour
 
 	public void DeleteAll()
 	{
-		foreach (GameObject o in GameObject.FindGameObjectsWithTag("LetterStatic"))
+		foreach (GameObject o in GameObject.FindGameObjectsWithTag("Letter"))
 		{
-			Destroy (o);
-		}
-
-		foreach (GameObject o in GameObject.FindGameObjectsWithTag("LetterActive"))
-		{
-			Destroy (o);
+			o.GetComponent<LetterObject> ().StartCoroutine (o.GetComponent<LetterObject> ().UnscaleOverTime (1f));
 		}
 	}
 
@@ -153,6 +148,7 @@ public class LetterManager : MonoBehaviour
 		} 
 		else 
 		{
+			GameManager.instance.AddComaredLetter ();
 			Destroy (letter);
 		}
 	}

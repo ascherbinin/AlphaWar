@@ -50,7 +50,7 @@ public class LetterObject : MonoBehaviour
 	{
 		_renderer.color = state == LetterState.Static ? _staticColor : _acviteColor;
 		_text.color = state == LetterState.Static ? _staticColor : _acviteColor;
-		gameObject.tag = state == LetterState.Static ? "LetterStatic" : "LetterActive";
+		gameObject.tag = "Letter";
 		_text.text = value.ToString();
         gameObject.transform.position = pos;
 		ID = id;
@@ -85,7 +85,7 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseOver() 
 	{
-		if (gameObject.tag == "LetterActive") 
+		if (State == LetterState.Active)
 		{
 			_renderer.color = Color.Lerp(_acviteColor, _blinkColor, Mathf.PingPong(Time.time, 1));
 		}
@@ -94,8 +94,8 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseExit()
 	{
-		if (gameObject.tag == "LetterActive") 
-		{
+		if (State == LetterState.Active)
+		{ 
 			_renderer.color = Color.Lerp(_renderer.color, _acviteColor, 1);
 		}
 	}
@@ -139,5 +139,22 @@ public class LetterObject : MonoBehaviour
 	public void Move(GameObject letter, float timeToMove)
 	{
 		StartCoroutine(MoveToTarget(letter, timeToMove));
+	}
+
+	public IEnumerator UnscaleOverTime(float time)
+	{
+		Vector2 originalScale = gameObject.transform.localScale;
+
+		Vector2 destinationScale = new Vector2(0f, 0f);
+
+		float currentTime = 0.0f;
+
+		do
+		{
+			gameObject.transform.localScale = Vector2.Lerp(originalScale, destinationScale, currentTime / time);
+			currentTime += Time.deltaTime;
+			yield return null;
+		} while (currentTime <= time);
+		Destroy (gameObject);
 	}
 }

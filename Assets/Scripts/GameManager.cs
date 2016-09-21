@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance = null;
 	public string[] Words;
+	private string _currentWord;
+	private int _intNeedCompareLetters;
+	private int _curCompareLetter = 0;
 
     void Awake()
 	{
@@ -40,14 +43,29 @@ public class GameManager : MonoBehaviour
 
 	void InitGame()
 	{
-		string wordStr = Words[Random.Range(0,Words.Length)];
-        LetterManager.instance.Word = wordStr;
-        LetterManager.instance.RunGenerate(wordStr);
+		_currentWord = Words[Random.Range(0,Words.Length)];
+		_intNeedCompareLetters = _currentWord.Length;
+		LetterManager.instance.RunGenerate(_currentWord);
 	}
 
-	public void Restart()
+	public void Restart(bool reload)
 	{
-		string wordStr = Words[Random.Range(0,Words.Length)];
-		LetterManager.instance.ReloadLevel (wordStr);
+		if (!reload) 
+		{
+			_currentWord = Words[Random.Range(0,Words.Length)];
+		}
+		_intNeedCompareLetters = _currentWord.Length;
+		_curCompareLetter = 0;
+		LetterManager.instance.ReloadLevel (_currentWord);
+	}
+
+	public void AddComaredLetter()
+	{
+		if (++_curCompareLetter >= _intNeedCompareLetters) 
+		{
+			Restart (false);
+		}
+		Debug.Log (_curCompareLetter);
+		Debug.Log (_intNeedCompareLetters);
 	}
 }

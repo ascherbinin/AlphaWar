@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LetterStatic
   - LetterActive
+  - Letter
   layers:
   - Default
   - TransparentFX
