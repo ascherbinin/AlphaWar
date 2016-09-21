@@ -111,7 +111,7 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010495156156}
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.3
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -119,7 +119,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &61000012309560916
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -128,7 +128,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1000010495156156}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 886310dd869ca4a1c9c96eff9d3f6fe9, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
@@ -171,6 +171,7 @@ MonoBehaviour:
   _acviteColor: {r: 1, g: 1, b: 1, a: 1}
   _staticColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _blinkColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _compareColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!212 &212000010427068238
 SpriteRenderer:
   m_ObjectHideFlags: 1

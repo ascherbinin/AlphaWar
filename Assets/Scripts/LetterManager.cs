@@ -45,7 +45,8 @@ public class LetterManager : MonoBehaviour
     {
 		Word = pWord;
         GenerateLettersForWord();
-        GenerateRandomLetters();
+        GenerateFlyLetters();
+		GenerateRandomLetters ();
         FillLetters();
     }
 
@@ -62,24 +63,36 @@ public class LetterManager : MonoBehaviour
         }
     }
 
-    public void GenerateRandomLetters()
+    public void GenerateFlyLetters()
     {
-        Vector2 rndPosWithin;
 		foreach (Letter item in _wordLetters)
         {
-			rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-			rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
-			var temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
-
+			var temp = new Letter(item.Value, LetterState.Active, GetRandomPositionFromSpawnObject(), item.GetID());
 			while (DoLetterIntersect (temp)) 
 			{
-				rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-				rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
-				temp = new Letter(item.Value, LetterState.Active, rndPosWithin, item.GetID());
+				temp = new Letter(item.Value, LetterState.Active, GetRandomPositionFromSpawnObject(), item.GetID());
 			}
 			_randomLetters.Add (temp);
         }
     }
+
+	public void GenerateRandomLetters()
+	{
+		for (int i = 0; i < 10; i++) 
+		{
+			char ch = GetRandomLetter ();
+			while (_randomLetters.Exists (item => item.Value == ch)) 
+			{
+				ch = GetRandomLetter ();
+			}
+			var temp = new Letter(ch, LetterState.Active, GetRandomPositionFromSpawnObject());
+			while (DoLetterIntersect (temp)) 
+			{
+				temp = new Letter (ch, LetterState.Active, GetRandomPositionFromSpawnObject ());
+			}
+			_randomLetters.Add (temp);
+		}
+	}
 
     public void FillLetters()
     {
@@ -162,5 +175,21 @@ public class LetterManager : MonoBehaviour
 	GameObject GetFirstStaticLetter()
 	{
 		return _lettersObject.Find (state => state.GetComponent<LetterObject> ().State == LetterState.Static);
+	}
+
+	Vector2 GetRandomPositionFromSpawnObject()
+	{
+		var rndPosWithin = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+		rndPosWithin = Spawn.gameObject.transform.TransformPoint(rndPosWithin * .5f);
+		return rndPosWithin;
+	}
+
+	static char GetRandomLetter()
+	{
+		// This method returns a random lowercase letter.
+		// ... Between 'a' and 'z' inclusize.
+		int num = Random.Range(0, 26); // Zero to 25
+		char let = (char)('A' + num);
+		return let;
 	}
 }

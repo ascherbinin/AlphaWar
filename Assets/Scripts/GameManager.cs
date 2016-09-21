@@ -7,6 +7,7 @@ public enum GameState
     Play,
     Pause,
     Win,
+	StageComplete,
     Lose
 }
 

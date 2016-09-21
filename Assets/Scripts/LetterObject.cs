@@ -5,7 +5,8 @@ using System.Collections;
 public enum LetterState 
 {
 	Active,
-	Static
+	Static,
+	Compared
 }
 
 public class LetterObject : MonoBehaviour 
@@ -17,6 +18,7 @@ public class LetterObject : MonoBehaviour
 	public Color _acviteColor = Color.white;
     public Color _staticColor = Color.gray;
     public Color _blinkColor = Color.yellow;
+	public Color _compareColor = Color.cyan;
 
 	public Vector2 Position { get; set; }
 	public string Value { get; set;}
@@ -56,11 +58,13 @@ public class LetterObject : MonoBehaviour
 		Value = value.ToString ();
 	}
 
-	public void SetActive()
+	public void SetCompared(bool finish)
 	{
-		_renderer.color = _acviteColor;
-		_text.color = _acviteColor;
-		State = LetterState.Active;
+		if (finish) {
+			_renderer.color = _compareColor;
+			_text.color = _compareColor;
+		}
+		State = LetterState.Compared;
 	}
 
 	IEnumerator ScaleOverTime(float time)
@@ -98,7 +102,10 @@ public class LetterObject : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		LetterManager.instance.CompareLetters (gameObject);
+		if (State == LetterState.Active)
+		{
+			LetterManager.instance.CompareLetters (gameObject);
+		}
 	}
 
 	void OnMouseEnter()
@@ -109,6 +116,7 @@ public class LetterObject : MonoBehaviour
 	IEnumerator MoveToTarget(GameObject letterTarget, float timeToMove)
 	{
 		LetterManager.instance.RemoveLetter (gameObject, false);
+		letterTarget.GetComponent<LetterObject> ().SetCompared (false);
 		gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
 		var currentPos = transform.position;
 		Vector2 originalScale = gameObject.transform.localScale;
@@ -125,7 +133,7 @@ public class LetterObject : MonoBehaviour
 			yield return null;
 		}
 		LetterManager.instance.RemoveLetter (gameObject, true);
-		letterTarget.GetComponent<LetterObject> ().SetActive ();
+		letterTarget.GetComponent<LetterObject> ().SetCompared (true);
 	}
 
 	public void Move(GameObject letter, float timeToMove)
