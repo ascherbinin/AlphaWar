@@ -14,6 +14,7 @@ public class LetterObject : MonoBehaviour
     public  SpriteRenderer _renderer;
 	public  GameObject _alphaText;
 	private TextMesh _text;
+	public  GameObject GoParticle;
 
 	public Color _acviteColor = Color.white;
     public Color _staticColor = Color.gray;
@@ -115,6 +116,7 @@ public class LetterObject : MonoBehaviour
 
 	IEnumerator MoveToTarget(GameObject letterTarget, float timeToMove)
 	{
+		CreateParticle ();
 		LetterManager.instance.RemoveLetter (gameObject, false);
 		letterTarget.GetComponent<LetterObject> ().SetCompared (false);
 		gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
@@ -156,5 +158,13 @@ public class LetterObject : MonoBehaviour
 			yield return null;
 		} while (currentTime <= time);
 		Destroy (gameObject);
+	}
+
+	void CreateParticle()
+	{
+		GameObject obj = (GameObject)Instantiate (GoParticle, new Vector2 (gameObject.transform.position.x, gameObject.transform.position.y), Quaternion.identity);
+		GoParticle.GetComponent<ParticleSystem> ().emissionRate = 70;
+		GoParticle.GetComponent<ParticleSystem> ().Play();
+		Destroy (obj, 3);
 	}
 }

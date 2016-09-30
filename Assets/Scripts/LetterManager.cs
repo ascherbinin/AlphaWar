@@ -47,7 +47,7 @@ public class LetterManager : MonoBehaviour
         GenerateLettersForWord();
         GenerateFlyLetters();
 		GenerateRandomLetters ();
-        FillLetters();
+		StartCoroutine(FillLetters());
     }
 
     public void GenerateLettersForWord()
@@ -94,7 +94,7 @@ public class LetterManager : MonoBehaviour
 		}
 	}
 
-    public void FillLetters()
+	public IEnumerator FillLetters()
     {
 		_resList.AddRange(_wordLetters);
 		_resList.AddRange (_randomLetters);
@@ -110,15 +110,21 @@ public class LetterManager : MonoBehaviour
 			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State, item.GetID());
 			_lettersObject.Add (obj);
         }
+		yield return new WaitForSeconds(2.5F);
+		GameManager.instance.ChangeState (GameState.Play);
     }
 
 	public void CompareLetters(GameObject obj)
 	{
 		var textObj = obj.GetComponent<LetterObject>();
 		var item = GetFirstStaticLetter();
-		if (item.GetComponent<LetterObject> ().ID == textObj.ID || item.GetComponent<LetterObject>().Value == textObj.Value) 
+		if (item.GetComponent<LetterObject> ().ID == textObj.ID || item.GetComponent<LetterObject> ().Value == textObj.Value)
 		{
 			textObj.Move (item, 1);
+		} 
+		else 
+		{
+			GameManager.instance.StartCoroutine (GameManager.instance.Shake());
 		}
 	}
 		
