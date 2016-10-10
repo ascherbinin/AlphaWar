@@ -72,7 +72,7 @@ public class LetterObject : MonoBehaviour
 	{
 		Vector2 originalScale = gameObject.transform.localScale;
 
-		Vector2 destinationScale = State == LetterState.Active ? new Vector2(0.7f, 0.7f) : new Vector2(1f, 1f);
+		Vector2 destinationScale = State == LetterState.Active ? new Vector2(0.5f, 0.5f) : new Vector2(0.7f, 0.7f);
 
 		float currentTime = 0.0f;
 

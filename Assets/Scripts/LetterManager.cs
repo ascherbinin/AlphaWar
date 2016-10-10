@@ -12,6 +12,7 @@ public class LetterManager : MonoBehaviour
 	private List<GameObject> _lettersObject = new List<GameObject>();
     public GameObject Spawn;
     public GameObject Letter;
+    public GameObject HunterObject;
 
     public string Word { get; set; }
 
@@ -54,12 +55,12 @@ public class LetterManager : MonoBehaviour
     {
         int count = Word.Length / 2;
         Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane));
-        float posY = center.y + 2.57F * 2.5F;
-        float posX = center.x - (2.57F * count) + 1.285F;
+        float posY = center.y + 2.57F * 3F;
+        float posX = center.x - (1.79F * count);
         foreach (char item in Word)
         {
 			_wordLetters.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
-            posX += 2.57F;
+            posX += 1.74F;
         }
     }
 
@@ -110,7 +111,9 @@ public class LetterManager : MonoBehaviour
 			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State, item.GetID());
 			_lettersObject.Add (obj);
         }
-		yield return new WaitForSeconds(2.5F);
+        GameObject enemy = (GameObject)Instantiate(HunterObject, GetRandomPositionFromSpawnObject(), Quaternion.identity);
+        enemy.GetComponent<HunterObject>().Setup(enemy.transform.position, GetRandomLetter());
+        yield return new WaitForSeconds(2.5F);
 		GameManager.instance.ChangeState (GameState.Play);
     }
 
