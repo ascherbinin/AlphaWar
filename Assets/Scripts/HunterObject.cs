@@ -113,8 +113,8 @@ public class HunterObject : MonoBehaviour, IEnemy
 
     GameObject GetTarget()
     {
-        var array = GameObject.FindGameObjectsWithTag("Letter");
-        target = array[UnityEngine.Random.Range(0, array.Length)];
+		var array = GameObject.FindObjectsOfType<MoveLetter>();
+        target = array[UnityEngine.Random.Range(0, array.Length-1)].gameObject;
         target.GetComponent<SpriteRenderer>().color = Color.gray;
         return target;
     }

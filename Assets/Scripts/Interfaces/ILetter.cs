@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ILetter : MonoBehaviour {
+public interface ILetter 
+{
+	Vector2 Position { get; set; }
+	string Value { get; set;}
+	string ID { get; set;}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Setup (Vector2 pos, char value, string id);
+	IEnumerator ScaleOverTime (float time);
+	IEnumerator UnscaleOverTime (float time);
 }

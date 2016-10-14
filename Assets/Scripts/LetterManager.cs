@@ -11,7 +11,8 @@ public class LetterManager : MonoBehaviour
 	private List<Letter> _resList = new List<Letter>();
 	private List<GameObject> _lettersObject = new List<GameObject>();
     public GameObject Spawn;
-    public GameObject Letter;
+    public GameObject MoveLetter;
+	public GameObject StaticLetter;
     public GameObject HunterObject;
 
     public string Word { get; set; }
@@ -103,12 +104,18 @@ public class LetterManager : MonoBehaviour
 		foreach (var item in _resList)
         {
             var rotation = Quaternion.identity;
-            if (item.State == LetterState.Active)
-            {
-                rotation = Quaternion.Euler(0, 0, Random.Range(-25, 25));
-            }    
-			GameObject obj = (GameObject)Instantiate(Letter, item.Position, rotation);
-			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.State, item.GetID());
+			GameObject letter;
+			if (item.State == LetterState.Active) 
+			{
+				rotation = Quaternion.Euler (0, 0, Random.Range (-25, 25));
+				letter = MoveLetter;
+			} 
+			else 
+			{
+				letter = StaticLetter;
+			}
+			GameObject obj = (GameObject)Instantiate(letter, item.Position, rotation);
+			obj.GetComponent<LetterObject>().Setup(item.Position, item.Value, item.GetID());
 			_lettersObject.Add (obj);
         }
         GameObject enemy = (GameObject)Instantiate(HunterObject, GetRandomPositionFromSpawnObject(), Quaternion.identity);
@@ -119,9 +126,9 @@ public class LetterManager : MonoBehaviour
 
 	public void CompareLetters(GameObject obj)
 	{
-		var textObj = obj.GetComponent<LetterObject>();
+		var textObj = obj.GetComponent<MoveLetter>();
 		var item = GetFirstStaticLetter();
-		if (item.GetComponent<LetterObject> ().ID == textObj.ID || item.GetComponent<LetterObject> ().Value == textObj.Value)
+		if (item.GetComponent<StaticLetter> ().ID == textObj.ID || item.GetComponent<StaticLetter> ().Value == textObj.Value)
 		{
 			textObj.Move (item, 1);
 		} 
