@@ -83,8 +83,8 @@ public class HunterObject : MonoBehaviour, IEnemy
         StartCoroutine(ScaleOverTime(1));
         _alphaText.GetComponent<MeshRenderer>().sortingOrder = 1;
         _alphaText.GetComponent<MeshRenderer>().sortingLayerID = GetComponent<SpriteRenderer>().sortingLayerID;
-        target = GetTarget();
         _renderer.color = Color.red;
+		target = GetTarget();
     }
 
     public void Setup(Vector2 pos, char value)
@@ -93,6 +93,7 @@ public class HunterObject : MonoBehaviour, IEnemy
         _text.text = value.ToString();
         gameObject.transform.position = pos;
         Value = value.ToString();
+	
     }
 
 
@@ -113,7 +114,7 @@ public class HunterObject : MonoBehaviour, IEnemy
     GameObject GetTarget()
     {
         var array = GameObject.FindGameObjectsWithTag("Letter");
-        target = array[UnityEngine.Random.Range(0, array.Length-1)];
+        target = array[UnityEngine.Random.Range(0, array.Length)];
         target.GetComponent<SpriteRenderer>().color = Color.gray;
         return target;
     }
