@@ -6,9 +6,7 @@ public class LetterManager : MonoBehaviour
 {
     public static LetterManager instance = null;
 
-	private List<Letter> _wordLetters = new List<Letter>();
-	private List<Letter> _randomLetters = new List<Letter>();
-	private List<Letter> _resList = new List<Letter>();
+	private List<Letter> _lettersList = new List<Letter>();
 	private List<GameObject> _lettersObject = new List<GameObject>();
     public GameObject Spawn;
     public GameObject MoveLetter;
@@ -60,21 +58,22 @@ public class LetterManager : MonoBehaviour
         float posX = center.x - (1.79F * count);
         foreach (char item in Word)
         {
-			_wordLetters.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
+            _lettersList.Add(new Letter(item, LetterState.Static, new Vector2(posX, posY)));
             posX += 1.74F;
         }
     }
 
     public void GenerateFlyLetters()
     {
-		foreach (Letter item in _wordLetters)
+        var tempList = new List<Letter>(_lettersList);
+        foreach (Letter item in tempList)
         {
 			var temp = new Letter(item.Value, LetterState.Active, GetRandomPositionFromSpawnObject(), item.GetID());
 			while (DoLetterIntersect (temp)) 
 			{
 				temp = new Letter(item.Value, LetterState.Active, GetRandomPositionFromSpawnObject(), item.GetID());
 			}
-			_randomLetters.Add (temp);
+            _lettersList.Add (temp);
         }
     }
 
@@ -83,7 +82,7 @@ public class LetterManager : MonoBehaviour
 		for (int i = 0; i < 10; i++) 
 		{
 			char ch = GetRandomLetter ();
-			while (_randomLetters.Exists (item => item.Value == ch)) 
+			while (_lettersList.Exists (item => item.Value == ch)) 
 			{
 				ch = GetRandomLetter ();
 			}
@@ -92,16 +91,13 @@ public class LetterManager : MonoBehaviour
 			{
 				temp = new Letter (ch, LetterState.Active, GetRandomPositionFromSpawnObject ());
 			}
-			_randomLetters.Add (temp);
+            _lettersList.Add (temp);
 		}
 	}
 
 	public IEnumerator FillLetters()
     {
-		_resList.AddRange(_wordLetters);
-		_resList.AddRange (_randomLetters);
-
-		foreach (var item in _resList)
+		foreach (var item in _lettersList)
         {
             var rotation = Quaternion.identity;
 			GameObject letter;
@@ -141,10 +137,8 @@ public class LetterManager : MonoBehaviour
 	public void ReloadLevel(string newWord)
 	{
 		DeleteAll ();
-		_resList.Clear ();
-		_wordLetters.Clear ();
-		_randomLetters.Clear ();
-		_lettersObject.Clear ();
+        _lettersList.Clear();
+        _lettersObject.Clear ();
 		RunGenerate (newWord);
 	}
 
@@ -173,7 +167,7 @@ public class LetterManager : MonoBehaviour
     {
 		bool intersect = false;
 
-		foreach (var item in _randomLetters) 
+		foreach (var item in _lettersList) 
 		{
 			if ((Mathf.Abs(a.Position.x - item.Position.x) * 2 < (a.Width + item.Width)) &&
 				(Mathf.Abs(a.Position.y - item.Position.y) * 2 < (a.Height + item.Height)))
@@ -186,7 +180,7 @@ public class LetterManager : MonoBehaviour
 
 	GameObject GetFirstStaticLetter()
 	{
-		return _lettersObject.Find (state => state.GetComponent<LetterObject> ().State == LetterState.Static);
+		return _lettersObject.Find (state => state.GetComponent<StaticLetter> ().IsCompared == false);
 	}
 
 	Vector2 GetRandomPositionFromSpawnObject()

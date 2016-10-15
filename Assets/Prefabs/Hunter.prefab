@@ -41,7 +41,7 @@ GameObject:
   - 50: {fileID: 50000010928870782}
   - 114: {fileID: 114000010117038642}
   m_Layer: 0
-  m_Name: HunterBlock
+  m_Name: Hunter
   m_TagString: EnemyLetter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +115,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -169,6 +169,7 @@ MonoBehaviour:
   _renderer: {fileID: 212000010347473232}
   _alphaText: {fileID: 1000010857693170}
   target: {fileID: 0}
+  MoveSpeed: 10
 --- !u!212 &212000010347473232
 SpriteRenderer:
   m_ObjectHideFlags: 1

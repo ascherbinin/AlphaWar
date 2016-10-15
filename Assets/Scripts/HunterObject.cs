@@ -14,7 +14,7 @@ public class HunterObject : MonoBehaviour, IEnemy
     public Vector2 Position { get; set; }
     public string Value { get; set; }
 
-    private float moveSpeed = 10f;
+    public float MoveSpeed = 5f;
 
     public int hp
     {
@@ -39,10 +39,9 @@ public class HunterObject : MonoBehaviour, IEnemy
 
     public void Interact(GameObject go)
     {
-        if (go == target)
+        if (go.GetComponent<MoveLetter>().ID == target.GetComponent<MoveLetter>().ID)
         {
             Destroy(target);
-            target = GetTarget();
         }
     }
 
@@ -106,7 +105,11 @@ public class HunterObject : MonoBehaviour, IEnemy
         if (target != null)
         { 
             Vector3 vectorToTarget = target.transform.position - transform.position;
-            transform.position += vectorToTarget.normalized * moveSpeed * Time.deltaTime;
+            transform.position += vectorToTarget.normalized * MoveSpeed * Time.deltaTime;
+        }
+        else
+        {
+            target = GetTarget();
         }
     }
 
@@ -114,8 +117,12 @@ public class HunterObject : MonoBehaviour, IEnemy
     GameObject GetTarget()
     {
 		var array = GameObject.FindObjectsOfType<MoveLetter>();
-        target = array[UnityEngine.Random.Range(0, array.Length-1)].gameObject;
-        target.GetComponent<SpriteRenderer>().color = Color.gray;
-        return target;
+        if (array.Length > 0)
+        { 
+            target = array[UnityEngine.Random.Range(0, array.Length-1)].gameObject;
+            target.GetComponent<SpriteRenderer>().color = Color.gray;
+            return target;
+        }
+        return null;
     }
 }

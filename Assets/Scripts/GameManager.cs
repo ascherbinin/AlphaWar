@@ -80,8 +80,6 @@ public class GameManager : MonoBehaviour
 			right.GetComponent<ParticleSystem> ().Emit (50);
 			Restart (false);
 		}
-		Debug.Log (_curCompareLetter);
-		Debug.Log (_intNeedCompareLetters);
 	}
 
 	public IEnumerator Shake() 

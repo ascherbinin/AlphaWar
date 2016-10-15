@@ -36,13 +36,9 @@ public class LetterObject : MonoBehaviour, ILetter
 
 	public void Setup(Vector2 pos, char value, string id)
 	{
-//		_renderer.color = state == LetterState.Static ? _staticColor : _acviteColor;
-//		_text.color = state == LetterState.Static ? _staticColor : _acviteColor;
-		gameObject.tag = "Letter";
 		_text.text = value.ToString();
         gameObject.transform.position = pos;
 		ID = id;
-//		State = state;
 		Value = value.ToString ();
 	}
 

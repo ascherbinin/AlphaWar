@@ -25,7 +25,7 @@ GameObject:
   - 114: {fileID: 114000011687686132}
   m_Layer: 0
   m_Name: StaticLetter
-  m_TagString: LetterStatic
+  m_TagString: Letter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
